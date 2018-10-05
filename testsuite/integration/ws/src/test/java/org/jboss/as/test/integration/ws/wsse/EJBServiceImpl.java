@@ -23,9 +23,15 @@ package org.jboss.as.test.integration.ws.wsse;
 
 import javax.ejb.Stateless;
 import javax.jws.WebService;
+import javax.xml.namespace.QName;
+import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.jboss.ws.api.annotation.EndpointConfig;
 import org.jboss.ws.api.annotation.WebContext;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Stateless
 @WebService
@@ -45,5 +51,28 @@ public class EJBServiceImpl implements ServiceIface {
 
     public String sayHello() {
         return "Secure Hello World!";
+    }
+
+    @Override
+    public Set<QName> getHeaders() {
+        QName securityHeader = new QName("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
+                "Security");
+        HashSet<QName> headers = new HashSet<QName>();
+        headers.add(securityHeader);
+        return headers;
+    }
+
+    @Override
+    public boolean handleMessage(SOAPMessageContext context) {
+        return true;
+    }
+
+    @Override
+    public boolean handleFault(SOAPMessageContext context) {
+        return true;
+    }
+
+    @Override
+    public void close(MessageContext context) {
     }
 }
