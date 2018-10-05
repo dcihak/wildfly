@@ -24,10 +24,12 @@ package org.jboss.as.test.integration.ws.authentication.policy.resources;
 
 import javax.ejb.Remote;
 import javax.jws.WebService;
+import javax.xml.ws.handler.soap.SOAPHandler;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 @Remote
 @WebService
-public interface EchoServiceRemote {
+public interface EchoServiceRemote extends SOAPHandler<SOAPMessageContext> {
 
     void echo(String echo);
 }

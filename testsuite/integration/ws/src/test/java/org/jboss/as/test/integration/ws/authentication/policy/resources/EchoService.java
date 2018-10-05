@@ -36,7 +36,12 @@ import javax.jws.WebService;
 import javax.security.auth.Subject;
 import javax.security.jacc.PolicyContext;
 import javax.security.jacc.PolicyContextException;
+import javax.xml.namespace.QName;
 import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+import javax.xml.ws.handler.soap.SOAPMessageContext;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Session Bean implementation class EchoService
@@ -66,4 +71,26 @@ public class EchoService implements EchoServiceRemote {
         }
     }
 
+    @Override
+    public Set<QName> getHeaders() {
+        QName securityHeader = new QName("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
+                "Security");
+        HashSet<QName> headers = new HashSet<QName>();
+        headers.add(securityHeader);
+        return headers;
+    }
+
+    @Override
+    public boolean handleMessage(SOAPMessageContext context) {
+        return true;
+    }
+
+    @Override
+    public boolean handleFault(SOAPMessageContext context) {
+        return true;
+    }
+
+    @Override
+    public void close(MessageContext context) {
+    }
 }
