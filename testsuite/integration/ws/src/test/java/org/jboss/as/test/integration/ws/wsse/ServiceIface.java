@@ -23,14 +23,12 @@ package org.jboss.as.test.integration.ws.wsse;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.xml.ws.handler.soap.SOAPHandler;
-import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 @WebService
         (
                 targetNamespace = "http://www.jboss.org/jbossws/ws-extensions/wssecuritypolicy"
         )
-public interface ServiceIface extends SOAPHandler<SOAPMessageContext> {
+public interface ServiceIface {
 
     @WebMethod
     String sayHello();
