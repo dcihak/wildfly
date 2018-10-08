@@ -40,7 +40,6 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -74,11 +73,6 @@ public class EchoService implements EchoServiceRemote {
     @Override
     public Set<QName> getHeaders() {
         return null;
-//        QName securityHeader = new QName("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
-//                "Security");
-//        HashSet<QName> headers = new HashSet<QName>();
-//        headers.add(securityHeader);
-//        return headers;
     }
 
     @Override
