@@ -372,6 +372,18 @@
             <artifactId>wildfly-system-jmx</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.16.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <version>3.1.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <profiles>
