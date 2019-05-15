@@ -22,6 +22,8 @@
 
 package org.jboss.as.test.manualmode.ejb.client.cluster;
 
+import org.jboss.ejb.client.EJBClientContext;
+
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
 import javax.naming.Context;
@@ -57,6 +59,11 @@ public class NonClusteredStatefulNodeNameEcho implements NodeNameEcho {
             throw new RuntimeException("Invocation on clustered bean always (10 times) ended up picking current node " + me);
         }
         return nodeName;
+    }
+
+    @Override
+    public int getMaximumConnectedClusterNodesFromCtx() {
+        return EJBClientContext.getCurrent().getMaximumConnectedClusterNodes();
     }
 
     private void lookupClusteredBean() {

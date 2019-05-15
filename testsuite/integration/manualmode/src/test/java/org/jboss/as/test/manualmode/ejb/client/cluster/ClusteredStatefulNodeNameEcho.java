@@ -22,6 +22,8 @@
 
 package org.jboss.as.test.manualmode.ejb.client.cluster;
 
+import org.jboss.ejb.client.EJBClientContext;
+
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
 
@@ -31,8 +33,14 @@ import javax.ejb.Stateful;
 @Stateful
 @Remote(NodeNameEcho.class)
 public class ClusteredStatefulNodeNameEcho implements NodeNameEcho {
+
     @Override
     public String getNodeName(boolean preferOtherNode) {
         return System.getProperty("jboss.node.name");
+    }
+
+    @Override
+    public int getMaximumConnectedClusterNodesFromCtx() {
+        return EJBClientContext.getCurrent().getMaximumConnectedClusterNodes();
     }
 }

@@ -44,14 +44,12 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.wildfly.test.api.Authentication;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -70,7 +68,6 @@ import static org.jboss.as.test.integration.management.util.ModelUtil.createOpNo
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-@Ignore("WFLY-4421")
 public class EJBClientClusterConfigurationTestCase {
 
     private static final Logger logger = Logger.getLogger(EJBClientClusterConfigurationTestCase.class);
@@ -86,6 +83,7 @@ public class EJBClientClusterConfigurationTestCase {
     // These should match what's configured in arquillian.xml for -Djboss.node.name of each server instance
     private static final String DEFAULT_JBOSSAS_NODE_NAME = "default-jbossas";
     private static final String JBOSSAS_WITH_OUTBOUND_CONNECTION_NODE_NAME = "jbossas-with-remote-outbound-connection";
+    private static final int MAX_ALLOWED_CONNECTED_NODES_VALUE = 20;
 
     @ArquillianResource
     private ContainerController container;
@@ -140,7 +138,6 @@ public class EJBClientClusterConfigurationTestCase {
      */
     @Test
     public void testServerToServerClusterFormation() throws Exception {
-
         // First start the default server
         this.container.start(DEFAULT_JBOSSAS);
 
@@ -166,6 +163,8 @@ public class EJBClientClusterConfigurationTestCase {
             final NodeNameEcho nonClusteredBean = (NodeNameEcho) this.context.lookup("ejb:/" + MODULE_NAME + "//" + NonClusteredStatefulNodeNameEcho.class.getSimpleName() + "!" + NodeNameEcho.class.getName() + "?stateful");
             final String nodeNameBeforeShutdown = nonClusteredBean.getNodeName(true);
             Assert.assertEquals("EJB invocation ended up on unexpected node", DEFAULT_JBOSSAS_NODE_NAME, nodeNameBeforeShutdown);
+
+            Assert.assertEquals("max-allowed-connected-nodes parameter must be equal to " + MAX_ALLOWED_CONNECTED_NODES_VALUE, MAX_ALLOWED_CONNECTED_NODES_VALUE, nonClusteredBean.getMaximumConnectedClusterNodesFromCtx());
 
             // now shutdown the default server
             this.container.stop(DEFAULT_JBOSSAS);
@@ -288,7 +287,7 @@ public class EJBClientClusterConfigurationTestCase {
             Utils.applyUpdate(operation, client);
 
             operation = createOpNode("system-property=EJBClientClusterConfigurationTestCase.max-allowed-connected-nodes", ModelDescriptionConstants.ADD);
-            operation.get("value").set("20");
+            operation.get("value").set(MAX_ALLOWED_CONNECTED_NODES_VALUE);
             Utils.applyUpdate(operation, client);
 
             operation = createOpNode("system-property=EJBClientClusterConfigurationTestCase.cluster-node-selector", ModelDescriptionConstants.ADD);
